@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Calendar with Date Picker</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- js bootap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- fontawsom -->
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Oswald&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        .calendar {
+            max-width: 550px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            align-items: center;
+        }
+        .day {
+            width: 14.28%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid #ddd;
+            cursor: pointer;
+        }
+        .day:hover {
+            background: #5553539a;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .selected-date {
+            text-align: center;
+            margin-top: 20px;
+        }
+     
+    
+
+    </style>
+</head>
+<body>
+
+     <div class="container mt-4">
+        <a href="./Home.html">  <button class="btn btn-dark m-2"> <i class="fa-sharp fa-solid fa-arrow-left fa-beat"></i> Back</button></a>
+          <img src="https://st3.depositphotos.com/1000423/18797/i/450/depositphotos_187978382-stock-photo-soccer-player-at-stadium-mixed.jpg"  width="100%" height="550vh" alt="">
+              <div class="row">
+                 <div class="col-lg-6 col-md-6 col-12">
+           <!-- Calendar start  -->
+                 <div class="calendar mt-5 m-5">
+                    <div class="header">
+                    <button class="btn btn-sm btn-primary" onclick="prevMonth()">◀</button>
+                    <span id="month-year" class="fw-bold mx-2"></span>
+                    <button class="btn btn-sm btn-primary" onclick="nextMonth()">▶</button>
+                </div>
+                        <div class="row fw-bold text-center">
+                         <div class="col">Sun</div>
+                         <div class="col">Mon</div>
+                        <div class="col">Tue</div>
+                        <div class="col">Wed</div>
+                        <div class="col">Thu</div>
+                        <div class="col">Fri</div>
+                        <div class="col">Sat</div>
+                </div>
+                            <div id="calendar-body" class="row text-center"></div>
+                  <!-- Date Picker Section -->
+                            <div class="selected-date">
+                            <label for="pickedDate" class="form-label">Selected Date:</label>
+                             <input type="text" id="pickedDate" class="form-control" readonly>
+                        </div>
+                </div>
+                </div>
+                <!-- calender End -->
+                 <!-- time Start -->
+          <div class="col-lg-6 col-md-6 col-12 mt-5">
+             <div class="card rounded shadow p-5">
+                    <div class="time-picker-container text-center">
+                        <h4>Select Time</h4>
+                        <label for="fromTime" class="form-label m-2"><b>From Time</b></label>
+                        <input type="text" id="fromTime" class="form-control timepicker" placeholder="Select From Time">
+        
+                        <label for="toTime" class="form-label m-2  "><b>To Time</b></label>
+                        <input type="text" id="toTime" class="form-control timepicker" placeholder="Select To Time">
+                    </div>   
+             </div>
+
+    <div class="row d-flex justify-content-end">
+        <div class="col-6 mt-5">
+            <div class="card rounded shadow text-center  d-flex justify-content-end">
+                    <b>Price</b> <!-- mention Price -->
+                     <a href="./Form.html">   <button class="btn btn-success m-5">Payment</button></a>
+            </div>
+       </div>
+   </div>  
+      </div>
+          
+            
+     </div>
+      </div>
+  
+   
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <script>
+        let currentDate = new Date();
+
+        function renderCalendar() {
+    const monthYear = document.getElementById("month-year");
+    const calendarBody = document.getElementById("calendar-body");
+    calendarBody.innerHTML = "";
+
+    let month = currentDate.getMonth();
+    let year = currentDate.getFullYear();
+    let firstDay = new Date(year, month, 1).getDay();
+    let daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    monthYear.textContent = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(currentDate);
+
+    let day = 1;
+    for (let i = 0; i < 6; i++) {
+        let row = document.createElement("div");
+        row.classList.add("row");
+
+        for (let j = 0; j < 7; j++) {
+            let cell = document.createElement("div");
+            cell.classList.add("col", "day");
+
+            if (i === 0 && j < firstDay) {
+                cell.innerHTML = "";
+            } else if (day > daysInMonth) {
+                cell.innerHTML = "";
+            } else {
+                cell.innerHTML = day;
+                let selectedDay = day;
+                cell.addEventListener("click", () => selectDate(selectedDay, month + 1, year));
+                day++;
+            }
+            row.appendChild(cell);
+        }
+        calendarBody.appendChild(row);
+    }
+}
+
+        function selectDate(day, month, year) {
+            document.getElementById("pickedDate").value = `${day}-${month}-${year}`;
+        }
+
+        function prevMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        document.addEventListener("DOMContentLoaded", renderCalendar);
+
+
+  
+    </script>
+ <script>
+    // Initialize Flatpickr
+    flatpickr(".timepicker", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "h:i K",  // 12-hour format with AM/PM
+        time_24hr: true
+    });
+</script>
+</body>
+</html>
